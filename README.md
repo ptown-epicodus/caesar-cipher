@@ -7,7 +7,7 @@
 
 ## Description
 
-This website was generated with [Drupal 7.54](https://www.drupal.org/project/drupal/releases/7.54).
+This website was generated with [Drupal 7.54](https://www.drupal.org/project/drupal/releases/7.54). It uses the custom Cipher module to take user input and encrypt a message with a [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher).
 
 
 ## Setup
@@ -95,6 +95,7 @@ This website was generated with [Drupal 7.54](https://www.drupal.org/project/dru
 
 * MySQL
 * Drupal
+* PHP
 
 ## Known Bugs
 
