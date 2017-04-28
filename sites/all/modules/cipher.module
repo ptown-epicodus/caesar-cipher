@@ -72,6 +72,13 @@ function cipher_menu() {
         'type' => MENU_NORMAL_ITEM
     );
 
+    $items['cipher_encryption_success'] = array(
+        'title' => 'Encrypted message',
+        'page callback' => 'cipher_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK
+    );
+
     return $items;
 }
 
@@ -122,4 +129,14 @@ function element_validate_appropriate_characters($element) {
             form_error($element, t('Use only non-numeric characters included on a standard keyboard in your phrase.'));
         }
     }
+}
+
+function cipher_form_submit($form, &$form_state) {
+    $_SESSION['encryption_output'] = $form_state['values']['phrase'];
+
+    $form_state['redirect'] = 'cipher_encryption_success';
+}
+
+function cipher_success() {
+    return $_SESSION['encryption_output'];
 }
