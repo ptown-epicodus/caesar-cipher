@@ -132,11 +132,38 @@ function element_validate_appropriate_characters($element) {
 }
 
 function cipher_form_submit($form, &$form_state) {
-    $_SESSION['encryption_output'] = $form_state['values']['phrase'];
+    $phrase = $form_state['values']['phrase'];
+    $shift = $form_state['values']['value'];
+    if ($form_state['values']['direction'] == 'left') {
+        $shift = 26 - ($shift % 26);
+    }
+
+    $_SESSION['encryption_output'] = encrypt($phrase, $shift);
 
     $form_state['redirect'] = 'cipher_encryption_success';
 }
 
 function cipher_success() {
     return $_SESSION['encryption_output'];
+}
+
+function encrypt($string, $shift) {
+    $encrypted_phrase = '';
+
+    $char_array = str_split(strtolower($string));
+
+    for ($i = 0; $i < count($char_array); $i++) {
+        $char = $char_array[$i];
+
+        $place_in_alphabet = array_search($char, ALPHABET);
+        if ($place_in_alphabet === false) {
+            $new_char = $char;
+        } else {
+            $new_char = ALPHABET[($place_in_alphabet + $shift)%26];
+        }
+
+        $encrypted_phrase .= $new_char;
+    }
+
+    return $encrypted_phrase;
 }
