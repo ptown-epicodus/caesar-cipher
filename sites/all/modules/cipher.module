@@ -1,5 +1,68 @@
 <?php
 
+define('ALPHABET', array(
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z'
+));
+
+define('PUNCTUATION', array(
+    ' ',
+    '.',
+    ',',
+    '/',
+    ';',
+    ':',
+    '\'',
+    '"',
+    '!',
+    '\\',
+    '<',
+    '>',
+    '?',
+    '[',
+    ']',
+    '{',
+    '}',
+    '|',
+    '~',
+    '`',
+    '@',
+    '#',
+    '$',
+    '%',
+    '^',
+    '&',
+    '*',
+    '(',
+    ')',
+    '-',
+    '_',
+));
+
 function cipher_menu() {
     $items['cipher'] = array(
         'title' => 'Cipher',
@@ -16,19 +79,25 @@ function cipher_form() {
     $form['value'] = array(
         '#title' => 'Shift value',
         '#type' => 'textfield',
-        '#description' => t('Please enter number to shift by.')
+        '#description' => t('Please enter number to shift by.'),
+        '#element_validate' => array('element_validate_integer_positive'),
+        '#required' => TRUE
     );
 
     $form['direction'] = array(
         '#title' => 'Shift direction',
         '#type' => 'textfield',
-        '#description' => t('Enter \'left\' or \'right\' for encryption direction.')
+        '#description' => t('Enter \'left\' or \'right\' for encryption direction.'),
+        '#element_validate' => array('element_validate_left_or_right'),
+        '#required' => TRUE
     );
 
     $form['phrase'] = array(
         '#title' => 'Phrase',
         '#type' => 'textfield',
-        '#description' => t('Please enter phrase to be encrypted.')
+        '#description' => t('Please enter phrase to be encrypted.'),
+        '#element_validate' => array('element_validate_appropriate_characters'),
+        '#required' => TRUE
     );
 
     $form['submit'] = array(
@@ -37,4 +106,20 @@ function cipher_form() {
     );
 
     return $form;
+}
+
+function element_validate_left_or_right($element) {
+    if ($element['#value'] != 'left' && $element['#value'] != 'right') {
+        form_error($element, t('Shift direction must be \'left\' or \'right\''));
+    }
+}
+
+function element_validate_appropriate_characters($element) {
+    $char_array = str_split(strtolower($element['#value']));
+    for ($i = 0; $i < count($char_array); $i++) {
+        $char = $char_array[$i];
+        if ( ! in_array($char, ALPHABET) && ! in_array($char, PUNCTUATION)) {
+            form_error($element, t('Use only non-numeric characters included on a standard keyboard in your phrase.'));
+        }
+    }
 }
