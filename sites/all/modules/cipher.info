@@ -1,0 +1,5 @@
+name = Cipher
+description = Encrypts user input using Caesar cipher.
+package = Cipher
+core = 7.x
+files[] = cipher.module
